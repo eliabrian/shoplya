@@ -44,7 +44,7 @@
           <div v-if="lists.length">
             <ul class="list-group">
               <router-link
-                :to="'lists/' + list.id"
+                :to="'list/' + list.id"
                 class="list-group-item list-group-item-action"
                 v-for="list in lists"
                 :key="list.id"
@@ -86,7 +86,7 @@ export default {
   methods: {
     fetchLists() {
       axios
-        .get("/api/lists")
+        .get("api/lists")
         .then(response => {
           this.lists = response.data;
         })

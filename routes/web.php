@@ -24,6 +24,10 @@ Route::middleware(['auth'])->group(function ()
     Route::prefix('api')->group(function () {
         //Lists Routes
         Route::resource('lists', 'api\ListsController');
+
+        //Items Routes
+        Route::get('lists/{list}/items', 'api\ItemsController@index');
+        Route::post('/items', 'api\ItemsController@store');
     });
 
     Route::get('/{any}', function () {
