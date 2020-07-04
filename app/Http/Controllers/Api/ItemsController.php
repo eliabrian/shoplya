@@ -56,17 +56,6 @@ class ItemsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Item  $item
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Item $item)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -86,6 +75,16 @@ class ItemsController extends Controller
      */
     public function destroy(Item $item)
     {
-        //
+        if($item->delete()){
+            return new ItemResource($item);
+        }
+    }
+
+    public function complete(Item $item)
+    {
+        $item->completed = !$item->completed;
+        $status = $item->save();
+
+        return response()->json(['status' => $status, 'message' => 'Changed!']);
     }
 }

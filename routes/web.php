@@ -28,6 +28,8 @@ Route::middleware(['auth'])->group(function ()
         //Items Routes
         Route::get('lists/{list}/items', 'api\ItemsController@index');
         Route::post('/items', 'api\ItemsController@store');
+        Route::delete('/items/{item:id}', 'api\ItemsController@destroy');
+        Route::put('/items/{item:id}/complete', 'api\ItemsController@complete');
     });
 
     Route::get('/{any}', function () {

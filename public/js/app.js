@@ -2143,6 +2143,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "List",
@@ -2189,8 +2211,7 @@ __webpack_require__.r(__webpack_exports__);
       this.loading = true;
       var name = this.name;
       var quantity = this.quantity;
-      var lists_id = this.id; //Store the item with name, quantity, and lists_id
-
+      var lists_id = this.id;
       axios.post("/api/items", {
         name: name,
         quantity: quantity,
@@ -2204,6 +2225,20 @@ __webpack_require__.r(__webpack_exports__);
         _this3.errors = error.response.data.errors;
       })["finally"](function () {
         _this3.loading = false;
+      });
+    },
+    completeItem: function completeItem(id) {
+      var _this4 = this;
+
+      axios.put("/api/items/" + id + "/complete").then(function (response) {
+        _this4.fetchLists();
+      });
+    },
+    destroyItem: function destroyItem(id) {
+      var _this5 = this;
+
+      axios["delete"]("/api/items/" + id).then(function (response) {
+        _this5.fetchItems();
       });
     }
   }
@@ -38051,7 +38086,7 @@ var render = function() {
       _c(
         "button",
         {
-          staticClass: "btn btn-outline-secondary btn-block",
+          staticClass: "btn btn-secondary btn-block",
           on: {
             click: function($event) {
               _vm.showForm = !_vm.showForm
@@ -38146,7 +38181,7 @@ var render = function() {
                       }
                     }),
                     _vm._v(" "),
-                    _vm.errors.name
+                    _vm.errors.quantity
                       ? _c("div", { staticClass: "invalid-feedback d-block" }, [
                           _vm._v(_vm._s(_vm.errors.quantity[0]))
                         ])
@@ -38182,13 +38217,74 @@ var render = function() {
         : _vm._e()
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "row mb-5" }, [
       _c("div", { staticClass: "col-12" }, [
         _vm.loading
           ? _c("div", { staticClass: "text-center" }, [_c("Loading")], 1)
           : _c("div", [
               _vm.items.length
-                ? _c("div", [_vm._v(_vm._s(_vm.items))])
+                ? _c("div", [
+                    _c(
+                      "ul",
+                      { staticClass: "list-group" },
+                      _vm._l(_vm.items, function(item) {
+                        return _c(
+                          "li",
+                          {
+                            key: item.id,
+                            staticClass:
+                              "list-group-item d-flex justify-content-between"
+                          },
+                          [
+                            _c(
+                              "div",
+                              { staticClass: "form-check form-check-inline" },
+                              [
+                                _c("input", {
+                                  staticClass: "form-check-input",
+                                  attrs: { type: "checkbox", id: "item" },
+                                  domProps: { checked: item.completed },
+                                  on: {
+                                    change: function($event) {
+                                      return _vm.completeItem(item.id)
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "form-check-label",
+                                    attrs: { for: "item" }
+                                  },
+                                  [_vm._v(_vm._s(item.name))]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-sm btn-danger",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.destroyItem(item.id)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fas fa-trash-alt",
+                                  attrs: { "aria-hidden": "true" }
+                                })
+                              ]
+                            )
+                          ]
+                        )
+                      }),
+                      0
+                    )
+                  ])
                 : _c("div", { staticClass: "text-center" }, [
                     _vm._v("There is no item on this list.")
                   ])

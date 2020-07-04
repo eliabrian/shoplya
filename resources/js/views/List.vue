@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="row mb-5">
-      <button class="btn btn-outline-secondary btn-block" @click="showForm = !showForm">
+      <button class="btn btn-secondary btn-block" @click="showForm = !showForm">
         <span v-if="!showForm">Add Item</span>
         <span v-if="showForm">Cancel</span>
       </button>
@@ -38,7 +38,7 @@
                 v-model="quantity"
                 :class="{'is-invalid': errors.quantity}"
               />
-              <div class="invalid-feedback d-block" v-if="errors.name">{{errors.quantity[0]}}</div>
+              <div class="invalid-feedback d-block" v-if="errors.quantity">{{errors.quantity[0]}}</div>
             </div>
             <div class="col">
               <button class="btn btn-primary w-100" type="submit" :disabled="!name.length">
@@ -53,13 +53,35 @@
         </form>
       </div>
     </div>
-    <div class="row">
+    <div class="row mb-5">
       <div class="col-12">
         <div class="text-center" v-if="loading">
           <Loading></Loading>
         </div>
         <div v-else>
-          <div v-if="items.length">{{ items }}</div>
+          <div v-if="items.length">
+            <ul class="list-group">
+              <li
+                class="list-group-item d-flex justify-content-between"
+                v-for="item in items"
+                :key="item.id"
+              >
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="item"
+                    v-on:change="completeItem(item.id)"
+                    :checked="item.completed"
+                  />
+                  <label class="form-check-label" for="item">{{ item.name }}</label>
+                </div>
+                <button class="btn btn-sm btn-danger" @click="destroyItem(item.id)">
+                  <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
           <div v-else class="text-center">There is no item on this list.</div>
         </div>
       </div>
@@ -116,7 +138,6 @@ export default {
       let quantity = this.quantity;
       let lists_id = this.id;
 
-      //Store the item with name, quantity, and lists_id
       axios
         .post("/api/items", { name, quantity, lists_id })
         .then(response => {
@@ -130,6 +151,18 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+    },
+
+    completeItem(id) {
+      axios.put("/api/items/" + id + "/complete").then(response => {
+        this.fetchLists();
+      });
+    },
+
+    destroyItem(id) {
+      axios.delete("/api/items/" + id).then(response => {
+        this.fetchItems();
+      });
     }
   }
 };
