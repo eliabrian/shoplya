@@ -2042,6 +2042,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("api/lists", {
         name: this.name
       }).then(function (response) {
+        _this2.name = "";
+
         _this2.fetchLists();
       })["catch"](function (error) {
         _this2.errors = error.response.data.errors.name;
@@ -38257,7 +38259,14 @@ var render = function() {
                                     staticClass: "form-check-label",
                                     attrs: { for: "item" }
                                   },
-                                  [_vm._v(_vm._s(item.name))]
+                                  [
+                                    _vm._v(
+                                      _vm._s(item.name) +
+                                        " (" +
+                                        _vm._s(item.quantity) +
+                                        ")"
+                                    )
+                                  ]
                                 )
                               ]
                             ),

@@ -98,6 +98,7 @@ export default {
       axios
         .post("api/lists", { name: this.name })
         .then(response => {
+          this.name = "";
           this.fetchLists();
         })
         .catch(error => {

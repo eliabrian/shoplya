@@ -74,7 +74,7 @@
                     v-on:change="completeItem(item.id)"
                     :checked="item.completed"
                   />
-                  <label class="form-check-label" for="item">{{ item.name }}</label>
+                  <label class="form-check-label" for="item">{{ item.name }} ({{ item.quantity }})</label>
                 </div>
                 <button class="btn btn-sm btn-danger" @click="destroyItem(item.id)">
                   <i class="fas fa-trash-alt" aria-hidden="true"></i>
